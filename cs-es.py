@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, url_for, request, redirect
 from datetime import datetime
 import json
 import os
@@ -14,7 +14,7 @@ student_info = {
 
 curr_question = list(data.keys())[0]
 curr_response = data[curr_question]
-last_q = [curr_question]
+last_q = []
 last_r = curr_response
 final_answer = ""
 
@@ -53,6 +53,8 @@ def intro():
         global last_q
         global last_r
 
+        last_q = []
+
         next_decision = curr_response[response]
         question = list(next_decision.keys())[0]
         next_responses = next_decision[question]
@@ -72,6 +74,7 @@ def intro():
 def questions():
     if request.method == "POST":
         try:
+            global last
             response = request.form["response-button"]
 
         except KeyError:
@@ -95,7 +98,7 @@ def questions():
                 last_q.append(curr_question)
                 last_r = curr_response
 
-                return redirect("/get-to-know/introduction/question/subquestion")
+                return render_template("questions.html", main_question=question, responses=next_responses)
             else:
                 curr_question = response
                 final_answer = next_decision
@@ -105,7 +108,6 @@ def questions():
     return render_template("questions.html", main_question=curr_question, responses=curr_response)
 
 
-# question/
 @ app.route("/get-to-know/introduction/question/answer", methods=["GET", "POST"])
 def answer():
     if request.method == "POST":
@@ -115,9 +117,10 @@ def answer():
         global last_q
         global last_r
 
+        print(last_q)
+        last_q.pop()
         curr_question = last_q[-1]
         curr_response = last_r
-        print(curr_question)
 
         return redirect('/get-to-know/introduction/question')
 
@@ -127,60 +130,7 @@ def answer():
 
 app.run(debug=True)
 
-
-# question/subquestion/
-@ app.route("/get-to-know/introduction/question/subquestion", methods=["GET", "POST"])
-def subquestions():
-    if request.method == "POST":
-        try:
-            global last_q
-            response = request.form["response-button"]
-        
-        except KeyError:
-            curr_question = last_q[-1]
-            curr_response = last_r
-            return redirect('/get-to-know/introduction/question')
-        
-        else:
-            global curr_response
-            global curr_question
-            global final_answer
-            global last_r
-
-            next_decision = curr_response[response]
-
-            if isinstance(next_decision, dict):
-                question = list(next_decision.keys())[0]
-                curr_question = question
-                next_responses = next_decision[question]
-                curr_response = next_responses
-
-                return render_template("subquestions.html", main_question=question, responses=next_responses)
-            else:
-                curr_question = response
-                final_answer = next_decision
-                return redirect("/get-to-know/introduction/question/subquestion/answer")
-
-    return render_template("subquestions.html", main_question=curr_question, responses=curr_response)
-
-
-@ app.route("/get-to-know/introduction/question/subquestion/answer", methods=["GET", "POST"])
-def answer():
-    if request.method == "POST":
-
-        global curr_question
-        global curr_response
-        global last_q
-        global last_r
-
-        curr_question = last_q[-1]
-        curr_response = last_r
-        print(curr_question)
-
-        return redirect('/get-to-know/introduction/question/subquestion/')
-
-    if "question" in request.args:
-        return render_template("answer.html", question=request.args["question"], answer=request.args["answer"])
-    return render_template("answer.html", question=curr_question, answer=final_answer)
-
-app.run(debug=True)
+# Test
+@ app.route("/get-to-know/introduction/question/test", methods=["GET", "POST"])
+def test():
+    pass
