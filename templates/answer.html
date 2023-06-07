@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="stylesheet"
+      href="{{url_for('static',filename='styles/answer.css')}}"
+    />
+    <title>FSKTM-ES | Answer</title>
+  </head>
+  <body>
+    <div class="answer-container">
+      <div class="answer-content">
+        <div class="answer-items answer-box", style="white-space: pre-line;">
+          {% if answer is iterable and answer is not string%} {% for text in
+          answer%}
+          <p id="answer-text">● {{text}}</p>
+          {% endfor %} {% else %}
+          <p id="answer-text">{{answer}}</p>
+          {% endif %}
+        </div>
+        <form method="POST" class="answer-items">
+          <button type="submit" id="back-button">Back</button>
+        </form>
+      </div>
+    </div>
+  </body>
+</html>
