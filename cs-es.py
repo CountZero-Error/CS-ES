@@ -83,6 +83,9 @@ def questions():
             return redirect('/get-to-know/introduction')
         
         else:
+            if response == "Develop you own cognitive science experiment.":
+                return redirect("/get-to-know/introduction/question/test")
+
             global curr_response
             global curr_question
             global final_answer
@@ -117,7 +120,10 @@ def answer():
         global last_q
         global last_r
 
-        print(last_q)
+        if last_q[-1] == "Test":
+            last_q.pop()
+            redirect('/get-to-know/introduction')
+
         last_q.pop()
         curr_question = last_q[-1]
         curr_response = last_r
@@ -128,9 +134,112 @@ def answer():
         return render_template("answer.html", question=request.args["question"], answer=request.args["answer"])
     return render_template("answer.html", question=curr_question, answer=final_answer)
 
-app.run(debug=True)
-
 # Test
 @ app.route("/get-to-know/introduction/question/test", methods=["GET", "POST"])
 def test():
-    pass
+    global last_q
+    last_q.append("Test")
+
+    test_data = data["Do you have experience in cognitive science?"]["Yes"]["What would you like to know today?"]["Develop you own cognitive science experiment."]
+    test_rules = []
+    test_rules.extend(rule for rule in test_data["2"])
+    test_rules.extend(rule for rule in test_data["3"])
+    test_rules.extend(rule for rule in test_data["48"])
+    test_rules.extend(rule for rule in test_data["5"])
+    test_rules.extend(rule for rule in test_data["6"])
+    test_rules.extend(rule for rule in test_data["7"])
+
+    if request.method == "POST":
+        rule_ans = request.form.to_dict()
+
+        ans_text = {"2": "You can use methods like visual perception experiments or eye-tracking studies to explore how individuals perceive and interpret visual stimuli.",
+                    "3": "You can consider using methods such as psycholinguistic experiments or language processing tasks to investigate the relationship between language and cognition.",
+                    "48": "Methods like attentional tasks or memory experiments can help you examine how attention and memory interact during learning tasks and the role of problem-solving strategies in cognitive processes.",
+                    "5": "You can explore using neuroimaging techniques like fMRI or EEG to study the neural mechanisms underlying cognitive processes.",
+                    "6": "Methods such as emotional priming tasks or emotional memory experiments can be used to investigate the effect of emotions on cognitive performance.",
+                    "7": "Methods like information processing tasks or perceptual experiments can help you study how people acquire and process information from the environment.",
+                    'Not valid': 'There is no experiment that can fulfill your requirements. Please try again.',
+                    None: "Please insert atleast one requirement and try again."}
+        result_test = None
+        for rule in test_rules:
+            if rule_ans[rule] == "Yes":
+                if rule in test_data["2"]:
+                    if result_test is None:
+                        result_test = "2"
+                    elif result_test != "2":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["3"]:
+                    if result_test is None:
+                        result_test = "3"
+                    elif result_test != "3":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["48"]:
+                    if result_test is None:
+                        result_test = "48"
+                    elif result_test != "48":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["5"]:
+                    if result_test is None:
+                        result_test = "5"
+                    elif result_test != "5":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["6"]:
+                    if result_test is None:
+                        result_test = "6"
+                    elif result_test != "6":
+                        result_test = 'Not valid'
+                        break
+                else:
+                    if result_test is None:
+                        result_test = "7"
+                    elif result_test != "7":
+                        result_test = 'Not valid'
+                        break
+
+            elif rule_ans[rule] == 'No':
+                if rule in test_data["2"]:
+                    if result_test is None:
+                        result_test = "2"
+                    elif result_test != "2":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["3"]:
+                    if result_test is None:
+                        result_test = "3"
+                    elif result_test != "3":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["48"]:
+                    if result_test is None:
+                        result_test = "48"
+                    elif result_test != "48":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["5"]:
+                    if result_test is None:
+                        result_test = "5"
+                    elif result_test != "5":
+                        result_test = 'Not valid'
+                        break
+                elif rule in test_data["6"]:
+                    if result_test is None:
+                        result_test = "6"
+                    elif result_test != "6":
+                        result_test = 'Not valid'
+                        break
+                else:
+                    if result_test is None:
+                        result_test = "7"
+                    elif result_test != "7":
+                        result_test = 'Not valid'
+                        break
+
+        result_test = ans_text[result_test]
+        return redirect(url_for('.answer', question="What experiment should I use?", answer=result_test))
+    return render_template("test.html", test_rules=test_rules)
+
+app.run(debug=True)

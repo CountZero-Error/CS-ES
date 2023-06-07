@@ -6,15 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link
       rel="stylesheet"
-      href="{{url_for('static',filename='styles/developdb.css')}}"
+      href="{{url_for('static',filename='styles/test.css')}}"
     />
-    <title>DB-ES | Develop a Database</title>
+    <title>CS-ES | Develop you own cognitive science experiment</title>
   </head>
   <body>
     <div class="questions-container">
       <div class="questions-content">
         <h1 class="questions-items" id="question">
-          Select the requirements for the Database you want to develop
+          Select the requirements for the experiment you want to develop
         </h1>
         <form
           action="#"
@@ -22,7 +22,7 @@
           id="develop-form"
           method="POST"
         >
-          {%for rule in db_rules%}
+          {%for rule in test_rules%}
           <div class="rule-selection">
             <label class="rule-text" for="{{rule}}">{{rule}}</label>
             <select class="rule-ans" name="{{rule}}">

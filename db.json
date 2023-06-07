@@ -35,7 +35,26 @@
                   ]
                }
             },
-            "More about serial position curve?": {
+            "Develop you own cognitive science experiment.": {
+               "2": [
+                  "Do you want to investigate how individuals perceive and interpret visual stimuli?"
+               ],
+               "3": [
+                  "Are you interested in exploring the relationship between language and cognition?"
+               ],
+               "48": [
+                  "Do you want to examine how attention and memory interact during learning tasks?",
+                  "Do you want to examine the role of problem-solving strategies in cognitive tasks?"
+               ],
+               "5": [
+                  "Are you interested in studying the neural mechanisms underlying cognitive processes?"
+               ],
+               "6": [
+                  "Do you want to investigate the effect of emotions on cognitive performance?"
+               ],
+               "7": [
+                  "Are you interested in studying how people acquire and process information from the environment?"
+               ]
             }
          }
       },
